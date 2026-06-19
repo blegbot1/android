@@ -4,14 +4,11 @@ import com.android.build.api.variant.FilterConfiguration
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.grgit)
     alias(libs.plugins.licensee)
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 licensee {
@@ -210,9 +207,7 @@ dependencies {
     implementation(libs.bundles.material.icons)
 
     // Database
-    implementation(libs.bundles.androidx.room)
     implementation(libs.bundles.androidx.datastore)
-    ksp(libs.androidx.room.compiler)
 
     implementation(libs.bundles.androidx.work)
 
@@ -249,14 +244,12 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.androidx.room.testing)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.manifest)
 
     debugImplementation(libs.leakcanary.android)
 
     // Room database backup
-    implementation(libs.roomdatabasebackup) {
         exclude(group = "org.reactivestreams", module = "reactive-streams")
     }
 
