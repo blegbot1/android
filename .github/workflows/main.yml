@@ -13,11 +13,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Install CMake and NDK
+      - name: Install CMake
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake
-          echo "y" | sdkmanager "ndk;25.1.8937393"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: |
+            ndk;23.1.7779620
       - name: Build Debug APK
         run: |
           chmod +x gradlew
