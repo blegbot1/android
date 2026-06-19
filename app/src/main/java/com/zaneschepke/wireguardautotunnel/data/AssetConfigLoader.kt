@@ -5,7 +5,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 object AssetConfigLoader {
-    fun loadConfigs(context: Context): List<Server> {
+    fun loadServers(context: Context): List<Server> {
         val servers = mutableListOf<Server>()
         try {
             val files = context.assets.list("configs") ?: return emptyList()
@@ -16,7 +16,6 @@ object AssetConfigLoader {
                 var privateKey = ""
                 var publicKey = ""
                 var endpoint = ""
-                var allowedIPs = "0.0.0.0/0"
                 var currentSection = ""
                 reader.forEachLine { line ->
                     val trimmed = line.trim()
@@ -33,14 +32,11 @@ object AssetConfigLoader {
                         trimmed.startsWith("Endpoint") && currentSection == "Peer" -> {
                             endpoint = trimmed.substringAfter("=").trim()
                         }
-                        trimmed.startsWith("AllowedIPs") && currentSection == "Peer" -> {
-                            allowedIPs = trimmed.substringAfter("=").trim()
-                        }
                     }
                 }
                 if (privateKey.isNotEmpty() && publicKey.isNotEmpty() && endpoint.isNotEmpty()) {
                     val name = fileName.removeSuffix(".conf")
-                    servers.add(Server(name, privateKey, publicKey, endpoint, allowedIPs))
+                    servers.add(Server(name, privateKey, publicKey, endpoint))
                 }
             }
         } catch (e: Exception) {
